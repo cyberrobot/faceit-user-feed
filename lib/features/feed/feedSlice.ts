@@ -35,10 +35,12 @@ export const fetchPosts = createAsyncThunk<
 >(
   'feed/fetchPosts',
   async (_, { getState, signal }) => {
+    // Read the page at request time so each successful dispatch advances pagination.
     const page = getState().feed.nextPage;
     const response = await fetch(`/api/posts?page=${page}`, { signal });
 
     if (!response.ok) {
+      // Prefer the API's message, while retaining a useful fallback for non-JSON errors.
       const body = (await response.json().catch(() => null)) as {
         error?: string;
       } | null;
@@ -51,6 +53,7 @@ export const fetchPosts = createAsyncThunk<
     return (await response.json()) as PostsPage;
   },
   {
+    // Skip duplicate in-flight fetches and avoid requests after the final page.
     condition: (_, { getState }) => {
       const { loading, hasMore } = getState().feed;
       return !loading && hasMore;
@@ -71,6 +74,7 @@ const feedSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         const { posts, page, pageSize, total } = action.payload;
 
+        // Keep IDs in first-seen order; overlapping pages update post data without duplicating IDs.
         for (const post of posts) {
           if (state.postsById !== null) {
             if (!state.postsById[post.id]) {
@@ -82,6 +86,7 @@ const feedSlice = createSlice({
         }
 
         state.nextPage = page + 1;
+        // The API reports the total count, so this determines whether another page exists.
         state.hasMore = page * pageSize < total;
         state.loading = false;
         state.error = null;
