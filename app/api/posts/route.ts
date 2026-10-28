@@ -1,7 +1,8 @@
+import { FEED_PAGE_SIZE } from '@/app/config/feed';
 import { posts } from '@/lib/data/posts';
 import { NextRequest, NextResponse } from 'next/server';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = FEED_PAGE_SIZE;
 
 export function GET(request: NextRequest) {
   const pageParam = request.nextUrl.searchParams.get('page');

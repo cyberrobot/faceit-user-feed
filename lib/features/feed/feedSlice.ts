@@ -1,5 +1,5 @@
 import { Post } from '@/lib/types/post';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '@/lib/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -101,7 +101,12 @@ const feedSlice = createSlice({
   },
 });
 
-export const selectFeedPosts = (state: RootState) =>
-  state.feed.feedIds.map((id) => state.feed.postsById[id]);
+export const selectFeedPosts = createSelector(
+  [
+    (state: RootState) => state.feed.feedIds,
+    (state: RootState) => state.feed.postsById,
+  ],
+  (feedIds, postsById) => feedIds.map((id) => postsById[id]),
+);
 
 export default feedSlice.reducer;

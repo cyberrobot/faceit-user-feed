@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeStore } from '@/lib/store';
-import { fetchPosts } from './feedSlice';
+import { fetchPosts, selectFeedPosts } from './feedSlice';
 import type { Post } from '@/lib/types/post';
 
 const makePost = (id: string): Post => ({
@@ -126,5 +126,17 @@ describe('feed state', () => {
 
     await store.dispatch(fetchPosts());
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns the same reference when feed data is unchanged', () => {
+    const store = makeStore();
+    const state = store.getState();
+
+    const firstResult = selectFeedPosts(state);
+    const secondResult = selectFeedPosts({
+      ...state,
+    });
+
+    expect(secondResult).toBe(firstResult);
   });
 });
