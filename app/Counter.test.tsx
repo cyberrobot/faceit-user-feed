@@ -1,4 +1,4 @@
-import { describe } from 'node:test';
+import { describe } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import StoreProvider from './StoreProvider';
