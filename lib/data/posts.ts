@@ -17,7 +17,7 @@ export const authors: Author[] = [
     id: 'author-003',
     name: 'Amara Okafor',
     username: 'amaraokafor',
-    avatarUrl: 'https://api.dicebear.com/10.x/lorelei/svg?seed=amaraokafor',
+    avatarUrl: '',
   },
 ];
 
@@ -35,7 +35,7 @@ export const posts: Post[] = [
     id: 'post-002',
     author: leo,
     content:
-      'Tried a new coffee place on my walk to work. Adding it to the regular rotation.',
+      'Just finished an incredible Counter-Strike 2 match! We were down 4-11 at halftime but managed to turn things around with some great teamwork and clutch plays. Definitely one of the best comebacks this season.',
     createdAt: '2026-10-28T08:05:00.000Z',
   },
   {
@@ -48,14 +48,14 @@ export const posts: Post[] = [
     id: 'post-004',
     author: maya,
     content:
-      'Made a playlist for the commute and it accidentally became an hour long.',
+      'Looking for three experienced players to join our competitive squad. We usually practise in the evenings and participate in weekly tournaments. Good communication and a positive attitude are essential.',
     createdAt: '2026-10-27T17:30:00.000Z',
   },
   {
     id: 'post-005',
     author: leo,
     content:
-      'Lunch today: leftovers that somehow tasted better than yesterday.',
+      'After spending the last two weeks working on my aim and positioning, I finally reached FACEIT Level 10! The grind was challenging, but reviewing demos and practising consistently made a huge difference.',
     createdAt: '2026-10-27T12:20:00.000Z',
   },
   {
@@ -158,7 +158,7 @@ export const posts: Post[] = [
     id: 'post-021',
     author: amara,
     content:
-      'The neighborhood cats seem to have a very organized afternoon schedule.',
+      'Had an amazing experience at the esports tournament this weekend. The atmosphere was electric, the competition was fierce, and we got to meet some incredibly talented players from across Europe.',
     createdAt: '2026-10-19T16:18:00.000Z',
   },
   {
@@ -171,7 +171,8 @@ export const posts: Post[] = [
   {
     id: 'post-023',
     author: leo,
-    content: 'Cleaned out one drawer. Celebrating the little wins.',
+    content:
+      'Does anyone else feel like the latest Counter-Strike 2 update has changed the weapon balance significantly? I have noticed some differences in recoil patterns and would love to hear what others think.',
     createdAt: '2026-10-18T10:35:00.000Z',
   },
   {
@@ -184,7 +185,7 @@ export const posts: Post[] = [
     id: 'post-025',
     author: maya,
     content:
-      'Saw a brilliant little dog in a raincoat on the way to the station.',
+      'Our team has been experimenting with new strategies on Mirage, especially around mid control and early rotations. The results have been promising so far, but we still need to improve our coordination.',
     createdAt: '2026-10-17T08:28:00.000Z',
   },
   {
