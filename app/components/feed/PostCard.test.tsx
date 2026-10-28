@@ -1,12 +1,23 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import type { Post } from '@/lib/types/post';
 import PostCard from './PostCard';
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string | { src: string }; alt: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={typeof src === 'string' ? src : src.src} alt={alt} />
+  default: ({
+    src,
+    alt,
+    onError,
+  }: {
+    src: string | { src: string };
+    alt: string;
+    onError?: () => void;
+  }) => (
+    <img
+      src={typeof src === 'string' ? src : src.src}
+      alt={alt}
+      onError={onError}
+    />
   ),
 }));
 
@@ -71,5 +82,19 @@ describe('PostCard', () => {
     });
 
     expect(image.getAttribute('src')).toContain('avatar.png');
+  });
+
+  it('displays fallback avatar when remote image fails', () => {
+    render(<PostCard post={post} />);
+
+    const avatar = screen.getByRole('img', {
+      name: 'Maya Chen',
+    });
+
+    expect(avatar.getAttribute('src')).toBe(post.author.avatarUrl);
+
+    fireEvent.error(avatar);
+
+    expect(avatar.getAttribute('src')).toContain('avatar.png');
   });
 });

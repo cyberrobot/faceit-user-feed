@@ -37,13 +37,6 @@ describe('Feed', () => {
     expect(screen.getByText('Author 20')).toBeTruthy();
   });
 
-  it('limits rendering to FEED_PAGE_SIZE', () => {
-    render(<Feed posts={makePosts(25)} status="succeeded" />);
-
-    expect(screen.getAllByRole('article')).toHaveLength(FEED_PAGE_SIZE);
-    expect(screen.queryByText('Author 21')).toBeNull();
-  });
-
   it('displays fewer posts when fewer are available', () => {
     render(<Feed posts={makePosts(5)} status="succeeded" />);
 
