@@ -58,6 +58,7 @@ const Feed = ({ posts, status, error, onRetry }: FeedProps) => {
   return (
     <section aria-label="Posts feed">
       <ul className="space-y-4">
+        {/* Keep the visible feed to one page even if the store has more posts loaded. */}
         {posts.slice(0, FEED_PAGE_SIZE).map((post) => (
           <li key={post.id}>
             <PostCard post={post} />

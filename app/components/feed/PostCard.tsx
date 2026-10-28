@@ -19,6 +19,7 @@ const PostCard = ({ post }: PostCardProps) => {
           alt={post.author.name}
           width={50}
           height={40}
+          // Next's image optimizer does not support the generated SVG avatar URLs.
           unoptimized={Boolean(post.author.avatarUrl?.includes('/svg'))}
           placeholder="blur"
           blurDataURL={fallbackAvatar.blurDataURL}

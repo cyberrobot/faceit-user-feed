@@ -17,6 +17,7 @@ export default function FeedContainer() {
   );
 
   useEffect(() => {
+    // Load only the first page on mount; after a failure, let the retry button own the next attempt.
     if (nextPage === 1 && !loading && !error) {
       void dispatch(fetchPosts());
     }

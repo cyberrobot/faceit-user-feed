@@ -2,6 +2,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
+  // Keep a post's displayed calendar date stable across viewers' local time zones.
   timeZone: 'UTC',
 });
 
