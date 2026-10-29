@@ -3,7 +3,9 @@ import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { Post } from '@/lib/types/post';
 import { FEED_PAGE_SIZE } from '@/app/config/feed';
-import Feed from './Feed';
+import Feed, { FeedStatus } from './Feed';
+import { Provider } from 'react-redux';
+import { makeStore } from '@/lib/store';
 
 vi.mock('next/image', () => ({
   default: ({ src, alt }: { src: string | { src: string }; alt: string }) => (
@@ -11,6 +13,22 @@ vi.mock('next/image', () => ({
     <img src={typeof src === 'string' ? src : src.src} alt={alt} />
   ),
 }));
+
+function renderContainer(
+  posts: Post[],
+  status: FeedStatus,
+  error?: string | null,
+) {
+  const store = makeStore();
+
+  const view = render(
+    <Provider store={store}>
+      <Feed posts={posts} status={status} error={error} />
+    </Provider>,
+  );
+
+  return { store, ...view };
+}
 
 function makePosts(count: number): Post[] {
   return Array.from({ length: count }, (_, index) => ({
@@ -30,7 +48,7 @@ afterEach(cleanup);
 
 describe('Feed', () => {
   it('displays 20 posts', () => {
-    render(<Feed posts={makePosts(20)} status="succeeded" />);
+    renderContainer(makePosts(20), 'succeeded');
 
     expect(screen.getAllByRole('article')).toHaveLength(20);
     expect(screen.getByText('Author 1')).toBeTruthy();
@@ -38,7 +56,7 @@ describe('Feed', () => {
   });
 
   it('displays fewer posts when fewer are available', () => {
-    render(<Feed posts={makePosts(5)} status="succeeded" />);
+    renderContainer(makePosts(5), 'succeeded');
 
     expect(screen.getAllByRole('article')).toHaveLength(5);
   });
@@ -46,7 +64,7 @@ describe('Feed', () => {
   it.each(['idle', 'loading'] as const)(
     'displays skeletons during %s state',
     (status) => {
-      const { container } = render(<Feed posts={[]} status={status} />);
+      const { container } = renderContainer([], status);
 
       expect(
         screen.getByRole('status', { name: 'Loading posts' }),
@@ -59,41 +77,61 @@ describe('Feed', () => {
   );
 
   it('displays the empty state', () => {
-    render(<Feed posts={[]} status="succeeded" />);
+    renderContainer([], 'succeeded');
 
     expect(screen.getByText('No posts available.')).toBeTruthy();
     expect(screen.queryAllByRole('article')).toHaveLength(0);
   });
 
   it('displays the error message', () => {
-    render(<Feed posts={[]} status="failed" error="Network unavailable" />);
+    renderContainer([], 'failed', 'Network unavailable');
 
     expect(screen.getByRole('alert')).toBeTruthy();
     expect(screen.getByText('Network unavailable')).toBeTruthy();
   });
 
   it('displays a fallback error message', () => {
-    render(<Feed posts={[]} status="failed" />);
+    renderContainer([], 'failed');
 
     expect(
       screen.getByText('Unable to load posts. Please try again.'),
     ).toBeTruthy();
   });
 
-  it('calls onRetry when the retry button is clicked', async () => {
-    const user = userEvent.setup();
-    const onRetry = vi.fn();
+  it('keeps existing posts visible while loading more', () => {
+    const { container } = renderContainer(makePosts(20), 'loading');
 
-    render(<Feed posts={[]} status="failed" onRetry={onRetry} />);
+    // The existing 20 posts must remain visible.
+    expect(screen.getAllByRole('article')).toHaveLength(20);
+    expect(screen.getByText('Author 1')).toBeTruthy();
+    expect(screen.getByText('Author 20')).toBeTruthy();
 
-    await user.click(screen.getByRole('button', { name: 'Try again' }));
+    // Only 2 additional skeletons should appear.
+    expect(
+      container.querySelectorAll('li > div[aria-hidden="true"]'),
+    ).toHaveLength(2);
 
-    expect(onRetry).toHaveBeenCalledOnce();
+    // Mark the feed as busy for assistive technology.
+    expect(
+      screen
+        .getByRole('region', { name: 'Posts feed' })
+        .getAttribute('aria-busy'),
+    ).toBe('true');
   });
 
-  it('does not display retry without an onRetry callback', () => {
-    render(<Feed posts={[]} status="failed" />);
+  it('keeps existing posts visible when loading more fails', async () => {
+    const user = userEvent.setup();
 
-    expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull();
+    renderContainer(makePosts(20), 'failed', 'Unable to load page 2');
+
+    // Already loaded posts remain visible.
+    expect(screen.getAllByRole('article')).toHaveLength(20);
+
+    // Display the pagination error beneath the feed.
+    expect(screen.getByRole('alert')).toBeTruthy();
+    expect(screen.getByText('Unable to load page 2')).toBeTruthy();
+
+    // Retry remains available.
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy();
   });
 });
