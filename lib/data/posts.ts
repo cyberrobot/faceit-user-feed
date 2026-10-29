@@ -34,8 +34,13 @@ export const posts: Post[] = [
   {
     id: 'post-002',
     author: leo,
-    content:
-      'Just finished an incredible Counter-Strike 2 match! We were down 4-11 at halftime but managed to turn things around with some great teamwork and clutch plays. Definitely one of the best comebacks this season.',
+    content: `Last night's Counter-Strike 2 match was one of the most intense games I've played in months. We started terribly, losing almost every opening duel and struggling to communicate. By halftime, we were down 3–9, and everyone was getting frustrated.
+
+Instead of giving up, we decided to change our approach. We slowed down our attacks, started using utility properly, and focused on playing together rather than chasing individual kills.
+
+The turning point came when our last surviving teammate won an impossible 1v3 clutch. Suddenly, everyone was talking again, calling positions, sharing information, and actually enjoying the game.
+
+We eventually won 13–11. It wasn't our cleanest performance, but it reminded me why I love competitive gaming. Sometimes teamwork and a positive attitude matter more than individual skill.`,
     createdAt: '2026-10-28T08:05:00.000Z',
   },
   {
@@ -47,15 +52,25 @@ export const posts: Post[] = [
   {
     id: 'post-004',
     author: maya,
-    content:
-      'Looking for three experienced players to join our competitive squad. We usually practise in the evenings and participate in weekly tournaments. Good communication and a positive attitude are essential.',
+    content: `After months of grinding ranked matches, I finally reached FACEIT Level 10! It's been a long journey filled with frustrating losses, unexpected winning streaks, and plenty of moments when I questioned whether I was actually improving.
+
+The biggest difference came when I stopped obsessing over my rating and started reviewing my own gameplay. Watching recorded matches helped me identify positioning mistakes, poor decisions, and situations where I was taking unnecessary risks.
+
+I also completely changed my practice routine. Instead of spending hours playing deathmatch, I started doing shorter, more focused sessions covering aim, movement, utility lineups, and communication.
+
+Reaching Level 10 feels amazing, but I'm more proud of the improvement along the way. There's still so much to learn, and I'm excited to see how far I can push myself next season.`,
     createdAt: '2026-10-27T17:30:00.000Z',
   },
   {
     id: 'post-005',
     author: leo,
-    content:
-      'After spending the last two weeks working on my aim and positioning, I finally reached FACEIT Level 10! The grind was challenging, but reviewing demos and practising consistently made a huge difference.',
+    content: `Our team participated in its first community Counter-Strike tournament this weekend. We went in with very modest expectations because we'd only been practising together for a few weeks, and some of us had never played in an organised competition.
+
+The first match was a disaster. We lost several rounds because of basic communication mistakes, missed rotations, and poor coordination. Playing under pressure felt completely different from our normal matchmaking sessions.
+
+Things improved significantly during the second match. We started trusting each other's calls, stopped making unnecessary solo plays, and managed to take a much more experienced team into overtime.
+
+We didn't make it to the finals, but the experience was absolutely worth it. We've already identified several areas to work on and are planning another practice session next week. Looking forward to the next tournament!`,
     createdAt: '2026-10-27T12:20:00.000Z',
   },
   {
@@ -157,8 +172,13 @@ export const posts: Post[] = [
   {
     id: 'post-021',
     author: amara,
-    content:
-      'Had an amazing experience at the esports tournament this weekend. The atmosphere was electric, the competition was fierce, and we got to meet some incredibly talented players from across Europe.',
+    content: `I've realised that spending every evening playing competitive games isn't necessarily making me a better player. Recently, I found myself getting frustrated much more easily, making careless mistakes, and struggling to enjoy matches that I would normally love.
+
+Last week, I decided to take a few days away from Counter-Strike. Instead of sitting at my desk after work, I went cycling, caught up with some friends, and finally finished a book that had been sitting on my shelf for months.
+
+When I returned to gaming, the difference was surprisingly noticeable. My concentration was better, I felt more patient with teammates, and losing a round no longer seemed like the end of the world.
+
+It's easy to forget that improvement requires recovery as well as practice. I'm going to start scheduling proper breaks and treating gaming as something I enjoy rather than another obligation.`,
     createdAt: '2026-10-19T16:18:00.000Z',
   },
   {
@@ -171,8 +191,13 @@ export const posts: Post[] = [
   {
     id: 'post-023',
     author: leo,
-    content:
-      'Does anyone else feel like the latest Counter-Strike 2 update has changed the weapon balance significantly? I have noticed some differences in recoil patterns and would love to hear what others think.',
+    content: `We're looking for two more players to join our Counter-Strike 2 team. We're a small group of friends who enjoy competitive matches and want to improve together without turning every evening into an overly serious training session.
+
+Ideally, we're looking for players who are comfortable communicating in English, have a reasonable understanding of utility usage, and are willing to learn new strategies. You don't need incredible statistics or thousands of hours of experience.
+
+We normally play three evenings a week and occasionally participate in community tournaments. Our main priorities are consistency, teamwork, and maintaining a friendly atmosphere, even when matches aren't going our way.
+
+If you're interested, leave a comment with your preferred role and approximate FACEIT level. We're happy to play a few casual matches first to see whether everyone gets along. Good communication is more important to us than a perfect win rate.`,
     createdAt: '2026-10-18T10:35:00.000Z',
   },
   {
@@ -184,8 +209,13 @@ export const posts: Post[] = [
   {
     id: 'post-025',
     author: maya,
-    content:
-      'Our team has been experimenting with new strategies on Mirage, especially around mid control and early rotations. The results have been promising so far, but we still need to improve our coordination.',
+    content: `I've been playing video games for as long as I can remember, and it's incredible how much the experience has changed over the years. What started as a simple way to relax after school eventually became one of my favourite ways to connect with people.
+
+Some of my closest friendships actually started in online matches. We've spent countless evenings competing together, laughing at ridiculous mistakes, celebrating unlikely victories, and occasionally arguing about whose fault that last round really was.
+
+The technology has improved dramatically, with better graphics, faster matchmaking, and competitive platforms that bring players together from around the world. But the thing that keeps me coming back hasn't really changed.
+
+For me, gaming has never been entirely about winning or climbing rankings. It's about shared experiences, memorable moments, and meeting people I probably wouldn't have encountered otherwise. That's what makes the gaming community special.`,
     createdAt: '2026-10-17T08:28:00.000Z',
   },
   {
