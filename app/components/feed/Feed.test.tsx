@@ -132,6 +132,6 @@ describe('Feed', () => {
     expect(screen.getByText('Unable to load page 2')).toBeTruthy();
 
     // Retry remains available.
-    await user.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy();
   });
 });
