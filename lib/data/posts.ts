@@ -286,3 +286,7 @@ export const posts: Post[] = [
     createdAt: '2026-10-10T09:05:00.000Z',
   },
 ];
+
+export function getPostById(id: string): Post | undefined {
+  return posts.find((post) => post.id === id);
+}
