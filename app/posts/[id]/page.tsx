@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import PostCard from '@/app/components/feed/PostCard';
 import { getPostById, posts } from '@/lib/data/posts';
 import { Metadata } from 'next';
+import { mockLivePosts } from '@/lib/data/mockLivePosts';
 
 export function generateStaticParams() {
-  return posts.map(({ id }) => ({ id }));
+  return [...posts, ...mockLivePosts].map(({ id }) => ({ id }));
 }
 
 export async function generateMetadata({

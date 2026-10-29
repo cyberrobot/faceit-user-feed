@@ -1,4 +1,5 @@
 import { Author, Post } from '../types/post';
+import { mockLivePosts } from './mockLivePosts';
 
 export const authors: Author[] = [
   {
@@ -358,5 +359,8 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
 ];
 
 export function getPostById(id: string): Post | undefined {
-  return posts.find((post) => post.id === id);
+  return (
+    posts.find((post) => post.id === id) ??
+    mockLivePosts.find((post) => post.id === id)
+  );
 }

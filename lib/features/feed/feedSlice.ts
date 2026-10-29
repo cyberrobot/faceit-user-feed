@@ -1,5 +1,9 @@
 import { Post } from '@/lib/types/post';
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import type { RootState } from '@/lib/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -64,10 +68,23 @@ export const fetchPosts = createAsyncThunk<
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
-  reducers: {},
+  reducers: {
+    postReceived(state, action: PayloadAction<Post>) {
+      const post = action.payload;
+
+      // Ignore duplicate deliveries while allowing data updates.
+      if (state.postsById[post.id]) {
+        state.postsById[post.id] = post;
+        return;
+      }
+
+      state.postsById[post.id] = post;
+      state.feedIds.unshift(post.id);
+    },
+  },
   extraReducers(builder) {
     builder
-      .addCase(fetchPosts.pending, (state, action) => {
+      .addCase(fetchPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
@@ -108,5 +125,7 @@ export const selectFeedPosts = createSelector(
   ],
   (feedIds, postsById) => feedIds.map((id) => postsById[id]),
 );
+
+export const { postReceived } = feedSlice.actions;
 
 export default feedSlice.reducer;
