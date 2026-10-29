@@ -1,21 +1,27 @@
+'use client';
+
 import { Post } from '@/lib/types/post';
 import Image from 'next/image';
 import fallbackAvatar from '@/public/avatar.png';
 import { truncateText } from '@/app/lib/utils/truncateText';
 import { formatDate } from '@/app/lib/utils/formatDate';
 import { useState } from 'react';
+import Link from 'next/link';
 
 interface PostCardProps {
   post: Post;
+  variant?: 'preview' | 'full';
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, variant = 'preview' }: PostCardProps) => {
   const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const avatarUrl = post.author.avatarUrl;
   const imageSrc =
     avatarUrl && failedAvatarUrl !== avatarUrl ? avatarUrl : fallbackAvatar;
-  const truncatedContent = truncateText(post.content);
   const formattedDate = formatDate(post.createdAt);
+  const isPreview = variant === 'preview';
+  const content = isPreview ? truncateText(post.content) : post.content;
+
   return (
     <article className="flex flex-col gap-2 p-4 border rounded-md shadow-sm bg-white dark:bg-zinc-900">
       <div className="flex gap-3">
@@ -42,7 +48,17 @@ const PostCard = ({ post }: PostCardProps) => {
           <p className="text-sm text-gray-500">Posted: {formattedDate}</p>
         </div>
       </div>
-      <p>{truncatedContent}</p>
+      <p>{content}</p>
+
+      {isPreview && (
+        <Link
+          href={`/posts/${encodeURIComponent(post.id)}`}
+          className="self-start font-medium text-blue-600 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          View post
+          <span className="sr-only"> by {post.author.name}</span>
+        </Link>
+      )}
     </article>
   );
 };

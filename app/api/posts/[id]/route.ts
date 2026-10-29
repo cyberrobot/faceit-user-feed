@@ -1,4 +1,4 @@
-import { posts } from '@/lib/data/posts';
+import { getPostById } from '@/lib/data/posts';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const post = posts.find((post) => post.id === id);
+  const post = getPostById(id);
 
   if (!post) {
     return NextResponse.json({ error: 'Page not found.' }, { status: 404 });

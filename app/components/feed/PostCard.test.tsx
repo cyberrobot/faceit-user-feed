@@ -97,4 +97,22 @@ describe('PostCard', () => {
 
     expect(avatar.getAttribute('src')).toContain('avatar.png');
   });
+
+  it('links to the post details page', () => {
+    render(<PostCard post={post} />);
+
+    const link = screen.getByRole('link', {
+      name: /view post/i,
+    });
+
+    expect(link.getAttribute('href')).toBe('/posts/post-001');
+  });
+
+  it('renders the full content in full mode', () => {
+    render(<PostCard post={post} variant="full" />);
+
+    expect(screen.getByText('a'.repeat(120))).toBeTruthy();
+
+    expect(screen.queryByRole('link', { name: /view post/i })).toBeNull();
+  });
 });
