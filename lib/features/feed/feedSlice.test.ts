@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeStore } from '@/lib/store';
-import { fetchPosts, selectFeedPosts } from './feedSlice';
+import { fetchPosts, postReceived, selectFeedPosts } from './feedSlice';
 import type { Post } from '@/lib/types/post';
 
 const makePost = (id: string): Post => ({
@@ -206,5 +206,73 @@ describe('feed state', () => {
       hasMore: false,
       feedIds: ['one', 'two'],
     });
+  });
+
+  it('prepends incoming posts and deduplicates IDs', () => {
+    const store = makeStore();
+    const incoming = makePost('live-001');
+
+    store.dispatch(postReceived(incoming));
+    store.dispatch(postReceived(incoming));
+
+    expect(store.getState().feed.feedIds).toEqual(['live-001']);
+
+    expect(store.getState().feed.postsById['live-001']).toEqual(incoming);
+
+    expect(store.getState().feed.nextPage).toBe(1);
+    expect(store.getState().feed.hasMore).toBe(true);
+  });
+
+  it('preserves page progression after incoming posts', () => {
+    const store = makeStore();
+
+    const pageOne = [makePost('post-001'), makePost('post-002')];
+
+    store.dispatch(
+      fetchPosts.fulfilled(
+        {
+          posts: pageOne,
+          page: 1,
+          pageSize: 2,
+          total: 4,
+        },
+        'request-1',
+        undefined,
+      ),
+    );
+
+    store.dispatch(postReceived(makePost('live-001')));
+
+    expect(store.getState().feed.feedIds).toEqual([
+      'live-001',
+      'post-001',
+      'post-002',
+    ]);
+
+    expect(store.getState().feed.nextPage).toBe(2);
+    expect(store.getState().feed.hasMore).toBe(true);
+
+    store.dispatch(
+      fetchPosts.fulfilled(
+        {
+          posts: [makePost('post-002'), makePost('post-003')],
+          page: 2,
+          pageSize: 2,
+          total: 4,
+        },
+        'request-2',
+        undefined,
+      ),
+    );
+
+    expect(store.getState().feed.feedIds).toEqual([
+      'live-001',
+      'post-001',
+      'post-002',
+      'post-003',
+    ]);
+
+    expect(store.getState().feed.nextPage).toBe(3);
+    expect(store.getState().feed.hasMore).toBe(false);
   });
 });
