@@ -275,4 +275,97 @@ describe('feed state', () => {
     expect(store.getState().feed.nextPage).toBe(3);
     expect(store.getState().feed.hasMore).toBe(false);
   });
+
+  it('preserves incoming posts while page 2 is loading', async () => {
+    let resolvePageTwo!: (response: Response) => void;
+
+    // Keep page 2 pending until explicitly resolved.
+    const pendingPageTwo = new Promise<Response>((resolve) => {
+      resolvePageTwo = resolve;
+    });
+
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(
+        jsonResponse({
+          posts: [makePost('post-001'), makePost('post-002')],
+          page: 1,
+          pageSize: 2,
+          total: 4,
+        }),
+      )
+      .mockReturnValueOnce(pendingPageTwo);
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const store = makeStore();
+
+    // 1. Load the first page.
+    await store.dispatch(fetchPosts());
+
+    expect(store.getState().feed.feedIds).toEqual(['post-001', 'post-002']);
+
+    expect(store.getState().feed.nextPage).toBe(2);
+
+    // 2. Begin fetching page 2 without awaiting it.
+    const pageTwoRequest = store.dispatch(fetchPosts());
+
+    expect(store.getState().feed.loading).toBe(true);
+
+    // 3. Receive a live post while page 2 is pending.
+    const livePost = makePost('live-001');
+
+    store.dispatch(postReceived(livePost));
+
+    expect(store.getState().feed.feedIds).toEqual([
+      'live-001',
+      'post-001',
+      'post-002',
+    ]);
+
+    // Pagination must remain unchanged during the event.
+    expect(store.getState().feed.nextPage).toBe(2);
+    expect(store.getState().feed.loading).toBe(true);
+
+    // 4. Complete the page 2 request.
+    resolvePageTwo(
+      jsonResponse({
+        posts: [makePost('post-003'), makePost('post-004')],
+        page: 2,
+        pageSize: 2,
+        total: 4,
+      }),
+    );
+
+    await pageTwoRequest;
+
+    // 5. Verify the final Redux state.
+    const state = store.getState().feed;
+
+    expect(state.feedIds).toEqual([
+      'live-001',
+      'post-001',
+      'post-002',
+      'post-003',
+      'post-004',
+    ]);
+
+    // Live post remains accessible.
+    expect(state.postsById['live-001']).toEqual(livePost);
+
+    // No duplicate IDs.
+    expect(new Set(state.feedIds).size).toBe(5);
+
+    // Pagination advances normally.
+    expect(state.nextPage).toBe(3);
+    expect(state.hasMore).toBe(false);
+    expect(state.loading).toBe(false);
+    expect(state.error).toBeNull();
+
+    // Only the two expected API requests.
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+      '/api/posts?page=1',
+      '/api/posts?page=2',
+    ]);
+  });
 });

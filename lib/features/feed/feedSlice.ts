@@ -1,5 +1,9 @@
 import { Post } from '@/lib/types/post';
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import type { RootState } from '@/lib/store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
