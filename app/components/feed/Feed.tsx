@@ -2,18 +2,22 @@ import { Post } from '@/lib/types/post';
 import PostCard from './PostCard';
 import { FEED_PAGE_SIZE } from '@/app/config/feed';
 import PostSkeletonCard from './PostCardSkeleton';
+import { RetryButton } from './RetryButton';
 
-type FeedStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+export type FeedStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 
 interface FeedProps {
   posts: Post[];
   status: FeedStatus;
   error?: string | null;
-  onRetry?: () => void;
 }
 
-const Feed = ({ posts, status, error, onRetry }: FeedProps) => {
-  if (status === 'idle' || status === 'loading') {
+const Feed = ({ posts, status, error }: FeedProps) => {
+  const hasPosts = posts.length > 0;
+  const isLoading = status === 'loading';
+  const isFailed = status === 'failed';
+
+  if (!hasPosts && (status === 'idle' || isLoading)) {
     return (
       <section role="status" aria-label="Loading posts">
         <ul className="space-y-4">
@@ -27,27 +31,19 @@ const Feed = ({ posts, status, error, onRetry }: FeedProps) => {
     );
   }
 
-  if (status === 'failed') {
+  if (!hasPosts && isFailed) {
     return (
       <div role="alert" className="rounded-lg border p-6 text-center">
         <p className="text-gray-700">
           {error || 'Unable to load posts. Please try again.'}
         </p>
 
-        {onRetry && (
-          <button
-            type="button"
-            onClick={onRetry}
-            className="mt-4 h-12 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
-          >
-            Try again
-          </button>
-        )}
+        <RetryButton />
       </div>
     );
   }
 
-  if (posts.length === 0) {
+  if (!hasPosts) {
     return (
       <div className="rounded-lg border p-6 text-center">
         <p className="text-gray-500">No posts available.</p>
@@ -56,7 +52,7 @@ const Feed = ({ posts, status, error, onRetry }: FeedProps) => {
   }
 
   return (
-    <section aria-label="Posts feed">
+    <section aria-label="Posts feed" aria-busy={isLoading}>
       <ul className="space-y-4">
         {/* Feed render the posts supplied by Redux. The API controls page size. */}
         {posts.map((post) => (
@@ -64,7 +60,25 @@ const Feed = ({ posts, status, error, onRetry }: FeedProps) => {
             <PostCard post={post} />
           </li>
         ))}
+        {/* Show 2 skeletons when fetching the next page. */}
+        {isLoading &&
+          Array.from({ length: 2 }).map((_, index) => (
+            <li key={`loading-${index}`}>
+              <PostSkeletonCard />
+            </li>
+          ))}
       </ul>
+
+      {/* Inline error and retry for subsequent pages. */}
+      {isFailed && (
+        <div role="alert" className="mt-4 rounded-lg border p-6 text-center">
+          <p className="text-gray-700">
+            {error || 'Unable to load more posts. Please try again.'}
+          </p>
+
+          <RetryButton />
+        </div>
+      )}
     </section>
   );
 };

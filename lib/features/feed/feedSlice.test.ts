@@ -139,4 +139,71 @@ describe('feed state', () => {
 
     expect(secondResult).toBe(firstResult);
   });
+
+  it('retries the failed page and advances only after success', async () => {
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      // Page 1 succeeds.
+      .mockResolvedValueOnce(
+        jsonResponse({
+          posts: [makePost('one')],
+          page: 1,
+          pageSize: 1,
+          total: 2,
+        }),
+      )
+      // Page 2 initially fails.
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 503,
+        json: async () => ({ error: 'Service unavailable' }),
+      } as Response)
+      // Retrying page 2 succeeds.
+      .mockResolvedValueOnce(
+        jsonResponse({
+          posts: [makePost('two')],
+          page: 2,
+          pageSize: 1,
+          total: 2,
+        }),
+      );
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const store = makeStore();
+
+    // Fetch page 1.
+    await store.dispatch(fetchPosts());
+
+    expect(store.getState().feed.nextPage).toBe(2);
+    expect(store.getState().feed.feedIds).toEqual(['one']);
+
+    // Fetch page 2, which fails.
+    await store.dispatch(fetchPosts());
+
+    expect(store.getState().feed).toMatchObject({
+      nextPage: 2,
+      loading: false,
+      error: 'Service unavailable',
+      hasMore: true,
+      feedIds: ['one'],
+    });
+
+    // Retry must request page 2 again.
+    await store.dispatch(fetchPosts());
+
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([
+      '/api/posts?page=1',
+      '/api/posts?page=2',
+      '/api/posts?page=2',
+    ]);
+
+    expect(store.getState().feed).toMatchObject({
+      nextPage: 3,
+      loading: false,
+      error: null,
+      hasMore: false,
+      feedIds: ['one', 'two'],
+    });
+  });
 });
