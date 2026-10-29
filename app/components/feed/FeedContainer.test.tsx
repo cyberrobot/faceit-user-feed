@@ -68,6 +68,7 @@ function makePosts(page: number): Post[] {
         username: `author${number}`,
         avatarUrl: '',
       },
+      title: `Post Title ${number}`,
       content: `Post content ${number}`,
       createdAt: '2026-10-28T14:30:00Z',
     };

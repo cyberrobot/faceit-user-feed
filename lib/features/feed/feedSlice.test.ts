@@ -11,6 +11,7 @@ const makePost = (id: string): Post => ({
     username: 'avery',
     avatarUrl: '/avatar.png',
   },
+  title: `Sample post title`,
   content: `Post ${id}`,
   createdAt: '2026-10-28T09:00:00.000Z',
 });

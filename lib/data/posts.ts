@@ -26,6 +26,7 @@ const [maya, leo, amara] = authors;
 export const posts: Post[] = [
   {
     id: 'post-001',
+    title: 'An Early Morning Run',
     author: maya,
     content:
       'Finally got outside for a morning run. The fresh air was worth the early alarm.',
@@ -33,6 +34,7 @@ export const posts: Post[] = [
   },
   {
     id: 'post-002',
+    title: 'The Comeback That Changed Everything',
     author: leo,
     content: `Last night's Counter-Strike 2 match was one of the most intense games I've played in months. We started terribly, losing almost every opening duel and struggling to communicate. By halftime, we were down 3–9, and everyone was getting frustrated.
 
@@ -45,12 +47,14 @@ We eventually won 13–11. It wasn't our cleanest performance, but it reminded m
   },
   {
     id: 'post-003',
+    title: 'A Reminder to Take a Break',
     author: amara,
     content: 'A small reminder to take a break, stretch, and drink some water.',
     createdAt: '2026-10-28T08:42:00.000Z',
   },
   {
     id: 'post-004',
+    title: 'The Road to FACEIT Level 10',
     author: maya,
     content: `After months of grinding ranked matches, I finally reached FACEIT Level 10! It's been a long journey filled with frustrating losses, unexpected winning streaks, and plenty of moments when I questioned whether I was actually improving.
 
@@ -63,6 +67,7 @@ Reaching Level 10 feels amazing, but I'm more proud of the improvement along the
   },
   {
     id: 'post-005',
+    title: 'Our First Community Tournament',
     author: leo,
     content: `Our team participated in its first community Counter-Strike tournament this weekend. We went in with very modest expectations because we'd only been practising together for a few weeks, and some of us had never played in an organised competition.
 
@@ -75,6 +80,7 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-006',
+    title: 'Cooking with Music',
     author: amara,
     content:
       'The best part of cooking at home is having music on while everything simmers.',
@@ -82,6 +88,7 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-007',
+    title: 'An Unforgettable Book Ending',
     author: maya,
     content:
       'Finished the book I started last week. That ending is going to stay with me.',
@@ -89,12 +96,14 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-008',
+    title: 'A Fresh Start at My Desk',
     author: leo,
     content: 'A clear desk makes Monday feel a little more manageable.',
     createdAt: '2026-10-26T09:00:00.000Z',
   },
   {
     id: 'post-009',
+    title: 'A Productive Afternoon at the Library',
     author: amara,
     content:
       'Found a quiet corner at the library and got through my whole reading list.',
@@ -102,36 +111,42 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-010',
+    title: 'A Detour to the Farmers Market',
     author: maya,
     content: 'Weekend walk turned into a detour through the farmers market.',
     createdAt: '2026-10-25T11:25:00.000Z',
   },
   {
     id: 'post-011',
+    title: 'Pancakes for No Reason',
     author: leo,
     content: 'Made pancakes for breakfast. No occasion needed.',
     createdAt: '2026-10-24T09:12:00.000Z',
   },
   {
     id: 'post-012',
+    title: 'The Joy of a Good Conversation',
     author: amara,
     content: 'A good conversation can make an ordinary afternoon feel special.',
     createdAt: '2026-10-24T16:50:00.000Z',
   },
   {
     id: 'post-013',
+    title: 'Catching the Last Light',
     author: maya,
     content: 'Took the scenic route home and caught the last bit of sunset.',
     createdAt: '2026-10-23T18:22:00.000Z',
   },
   {
     id: 'post-014',
+    title: 'Finally Organising My Photos',
     author: leo,
     content: 'Finally organized the photos on my phone. It only took a year.',
     createdAt: '2026-10-23T20:05:00.000Z',
   },
   {
     id: 'post-015',
+    title: 'Trying a New Soup Recipe',
     author: amara,
     content:
       'Testing a new soup recipe tonight. The kitchen already smells amazing.',
@@ -139,6 +154,7 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-016',
+    title: 'A Morning Stretching Routine',
     author: maya,
     content:
       'Tried a short stretching routine before starting work. Keeping this habit.',
@@ -146,18 +162,21 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-017',
+    title: 'The Perfect Rainy Evening',
     author: leo,
     content: 'Rainy evening, warm tea, and absolutely no plans. Perfect.',
     createdAt: '2026-10-21T19:30:00.000Z',
   },
   {
     id: 'post-018',
+    title: 'Fresh Flowers, Better Mood',
     author: amara,
     content: 'Picked up a few flowers for the table. Such a simple mood boost.',
     createdAt: '2026-10-21T14:15:00.000Z',
   },
   {
     id: 'post-019',
+    title: 'A New Podcast Obsession',
     author: maya,
     content:
       'A friend shared a podcast recommendation, and now I have five new episodes queued.',
@@ -165,12 +184,14 @@ We didn't make it to the finals, but the experience was absolutely worth it. We'
   },
   {
     id: 'post-020',
+    title: 'Taking a Proper Lunch Break',
     author: leo,
     content: 'Took a proper lunch break away from my screen. Highly recommend.',
     createdAt: '2026-10-20T12:45:00.000Z',
   },
   {
     id: 'post-021',
+    title: 'Why I Took a Break from Gaming',
     author: amara,
     content: `I've realised that spending every evening playing competitive games isn't necessarily making me a better player. Recently, I found myself getting frustrated much more easily, making careless mistakes, and struggling to enjoy matches that I would normally love.
 
@@ -183,6 +204,7 @@ It's easy to forget that improvement requires recovery as well as practice. I'm 
   },
   {
     id: 'post-022',
+    title: 'Discovering a New Artist',
     author: maya,
     content:
       'Went to a small gallery opening and discovered a new favorite artist.',
@@ -190,6 +212,7 @@ It's easy to forget that improvement requires recovery as well as practice. I'm 
   },
   {
     id: 'post-023',
+    title: 'Looking for Two CS2 Teammates',
     author: leo,
     content: `We're looking for two more players to join our Counter-Strike 2 team. We're a small group of friends who enjoy competitive matches and want to improve together without turning every evening into an overly serious training session.
 
@@ -202,12 +225,14 @@ If you're interested, leave a comment with your preferred role and approximate F
   },
   {
     id: 'post-024',
+    title: 'Sunday Meal Prep',
     author: amara,
     content: 'Sunday meal prep is done, and future me is already grateful.',
     createdAt: '2026-10-18T17:25:00.000Z',
   },
   {
     id: 'post-025',
+    title: 'Why Gaming Means More Than Winning',
     author: maya,
     content: `I've been playing video games for as long as I can remember, and it's incredible how much the experience has changed over the years. What started as a simple way to relax after school eventually became one of my favourite ways to connect with people.
 
@@ -220,6 +245,7 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-026',
+    title: 'Learning a New Language',
     author: leo,
     content:
       'Started learning a few phrases in a new language. One day at a time.',
@@ -227,24 +253,28 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-027',
+    title: 'Catching Up with Family',
     author: amara,
     content: 'Made time for a long phone call with family tonight.',
     createdAt: '2026-10-16T19:42:00.000Z',
   },
   {
     id: 'post-028',
+    title: 'Coffee After a Chilly Walk',
     author: maya,
     content: 'The first sip of coffee after a chilly walk really hit the spot.',
     createdAt: '2026-10-16T09:18:00.000Z',
   },
   {
     id: 'post-029',
+    title: 'Fixing a Wobbly Chair',
     author: leo,
     content: 'Fixed the wobbly chair I kept ignoring. Small household victory.',
     createdAt: '2026-10-15T18:55:00.000Z',
   },
   {
     id: 'post-030',
+    title: 'Rediscovering Old Ideas',
     author: amara,
     content:
       'Found an old notebook full of ideas I had completely forgotten about.',
@@ -252,12 +282,14 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-031',
+    title: 'Taking the Stairs',
     author: maya,
     content: 'Took the stairs today and somehow felt proud about it.',
     createdAt: '2026-10-14T11:10:00.000Z',
   },
   {
     id: 'post-032',
+    title: 'A Playlist for a Friend',
     author: leo,
     content:
       'Made a tiny playlist for a friend who needed a lift. Music is a good gift.',
@@ -265,6 +297,7 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-033',
+    title: 'Drawing Without Expectations',
     author: amara,
     content:
       'Tried drawing for twenty minutes without worrying about getting it right.',
@@ -272,6 +305,7 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-034',
+    title: 'A Slow Afternoon with a Book',
     author: maya,
     content:
       'A sunny window seat and a good book made for a very slow afternoon.',
@@ -279,18 +313,21 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-035',
+    title: 'Homemade Granola for Dinner',
     author: leo,
     content: 'Made a batch of granola and immediately had a bowl for dinner.',
     createdAt: '2026-10-12T19:08:00.000Z',
   },
   {
     id: 'post-036',
+    title: 'Finding a Hidden Park',
     author: amara,
     content: 'Walked a different route today and found a lovely little park.',
     createdAt: '2026-10-12T10:22:00.000Z',
   },
   {
     id: 'post-037',
+    title: 'Finishing a Long-Term Project',
     author: maya,
     content:
       'Wrapped up a project I have been chipping away at for weeks. On to the next.',
@@ -298,6 +335,7 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-038',
+    title: 'Pasta and a Familiar Film',
     author: leo,
     content:
       'Tonight’s plan: homemade pasta and a movie I have seen a dozen times.',
@@ -305,12 +343,14 @@ For me, gaming has never been entirely about winning or climbing rankings. It's 
   },
   {
     id: 'post-039',
+    title: 'An Evening Away from My Phone',
     author: amara,
     content: 'Put my phone away for the evening and finished a puzzle instead.',
     createdAt: '2026-10-10T21:15:00.000Z',
   },
   {
     id: 'post-040',
+    title: 'A Slow Start to the Weekend',
     author: maya,
     content: 'A good week deserves a slow start to the weekend.',
     createdAt: '2026-10-10T09:05:00.000Z',
