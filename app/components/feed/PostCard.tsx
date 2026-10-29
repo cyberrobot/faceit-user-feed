@@ -48,6 +48,7 @@ const PostCard = ({ post, variant = 'preview' }: PostCardProps) => {
           <p className="text-sm text-gray-500">Posted: {formattedDate}</p>
         </div>
       </div>
+      <h1 className="text-xl font-bold">{post.title}</h1>
       <p className="whitespace-pre-wrap wrap-break-word">{content}</p>
 
       {isPreview && (

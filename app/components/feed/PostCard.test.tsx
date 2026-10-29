@@ -29,6 +29,7 @@ const post: Post = {
     username: 'mayachen',
     avatarUrl: 'https://api.dicebear.com/10.x/lorelei/svg?seed=mayachen',
   },
+  title: 'Sample Post Title',
   content: 'a'.repeat(120),
   createdAt: '2026-10-28T14:30:00Z',
 };

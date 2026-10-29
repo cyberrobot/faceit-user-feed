@@ -39,6 +39,7 @@ function makePosts(count: number): Post[] {
       username: `author${index + 1}`,
       avatarUrl: '',
     },
+    title: `Post ${index + 1}`,
     content: `Post content ${index + 1}`,
     createdAt: '2026-10-28T14:30:00Z',
   }));

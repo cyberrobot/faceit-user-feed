@@ -16,7 +16,7 @@ export async function generateMetadata({
   const post = getPostById(id);
 
   return {
-    title: post ? `Post by ${post.author.name}` : 'Post not found',
+    title: post ? `${post.title} | ${post.author.name}` : 'Post not found',
   };
 }
 
