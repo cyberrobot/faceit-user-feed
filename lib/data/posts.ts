@@ -5,13 +5,13 @@ export const authors: Author[] = [
     id: 'author-001',
     name: 'Maya Chen',
     username: 'mayachen',
-    avatarUrl: 'https://api.dicebear.com/10.x/lorelei/svg?seed=mayachen',
+    avatarUrl: 'https://api.dicebear.com/10.x/dylan/svg?seed=mayachen',
   },
   {
     id: 'author-002',
     name: 'Leo Martin',
     username: 'leomartin',
-    avatarUrl: 'https://api.dicebear.com/10.x/lorelei/svg?seed=leomartin',
+    avatarUrl: 'https://api.dicebear.com/10.x/dylan/svg?seed=leomartin',
   },
   {
     id: 'author-003',
