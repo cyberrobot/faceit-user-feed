@@ -21,6 +21,10 @@ export default function FeedContainer() {
 
   const hasMore = useSelector((state: RootState) => state.feed.hasMore);
 
+  const highlightedIds = useSelector(
+    (state: RootState) => state.feed.highlightedIds,
+  );
+
   useEffect(() => {
     // Load only the first page on mount; after a failure, let the retry button own the next attempt.
     if (nextPage === 1 && !loading && !error) {
@@ -65,7 +69,12 @@ export default function FeedContainer() {
     <div className="mx-auto w-full px-4 py-8">
       <h1 className="mb-6 text-2xl font-semibold">Feed</h1>
 
-      <Feed posts={posts} status={status} error={error} />
+      <Feed
+        posts={posts}
+        status={status}
+        error={error}
+        highlightedIds={highlightedIds}
+      />
       <div
         ref={sentinelRef}
         data-testid="feed-sentinel"

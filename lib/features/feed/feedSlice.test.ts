@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeStore } from '@/lib/store';
-import { fetchPosts, postReceived, selectFeedPosts } from './feedSlice';
+import {
+  fetchPosts,
+  postHighlightExpired,
+  postReceived,
+  selectFeedPosts,
+} from './feedSlice';
 import type { Post } from '@/lib/types/post';
 
 const makePost = (id: string): Post => ({
@@ -422,5 +427,58 @@ describe('feed state', () => {
     ]);
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('highlights only newly received posts', () => {
+    const store = makeStore();
+    const post = makePost('live-001');
+
+    store.dispatch(postReceived(post));
+
+    expect(store.getState().feed.highlightedIds).toEqual({
+      'live-001': true,
+    });
+
+    // Re-delivering the same ID doesn't change ordering.
+    store.dispatch(postReceived({ ...post, title: 'Updated' }));
+
+    expect(store.getState().feed.feedIds).toEqual(['live-001']);
+    expect(store.getState().feed.highlightedIds).toEqual({
+      'live-001': true,
+    });
+
+    store.dispatch(postHighlightExpired(post.id));
+
+    expect(store.getState().feed.highlightedIds).toEqual({});
+
+    // A later duplicate must not highlight the post again.
+    store.dispatch(postReceived(post));
+
+    expect(store.getState().feed.highlightedIds).toEqual({});
+  });
+
+  it('does not highlight posts loaded through pagination', () => {
+    const store = makeStore();
+    const post = makePost('post-001');
+
+    store.dispatch(
+      fetchPosts.fulfilled(
+        {
+          posts: [post],
+          page: 1,
+          pageSize: 20,
+          total: 1,
+        },
+        'request-1',
+        undefined,
+      ),
+    );
+
+    expect(store.getState().feed.highlightedIds).toEqual({});
+
+    // A later event for the same existing post isn't "new".
+    store.dispatch(postReceived(post));
+
+    expect(store.getState().feed.highlightedIds).toEqual({});
   });
 });

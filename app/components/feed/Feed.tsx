@@ -10,9 +10,10 @@ interface FeedProps {
   posts: Post[];
   status: FeedStatus;
   error?: string | null;
+  highlightedIds?: Record<string, true>;
 }
 
-const Feed = ({ posts, status, error }: FeedProps) => {
+const Feed = ({ posts, status, error, highlightedIds = {} }: FeedProps) => {
   const hasPosts = posts.length > 0;
   const isLoading = status === 'loading';
   const isFailed = status === 'failed';
@@ -57,7 +58,10 @@ const Feed = ({ posts, status, error }: FeedProps) => {
         {/* Feed render the posts supplied by Redux. The API controls page size. */}
         {posts.map((post) => (
           <li key={post.id}>
-            <PostCard post={post} />
+            <PostCard
+              post={post}
+              isHighlighted={Boolean(highlightedIds[post.id])}
+            />
           </li>
         ))}
         {/* Show 2 skeletons when fetching the next page. */}
