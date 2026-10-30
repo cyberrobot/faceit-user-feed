@@ -35,6 +35,20 @@ describe('GET /api/posts', () => {
 
     expect(response.status).toBe(400);
   });
+
+  it('returns an empty page when requesting beyond the dataset', async () => {
+    const response = await getPosts(
+      new NextRequest('http://localhost/api/posts?page=3'),
+    );
+
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.posts).toEqual([]);
+    expect(body.page).toBe(3);
+    expect(body.pageSize).toBe(20);
+    expect(body.total).toBe(40);
+  });
 });
 
 describe('GET /api/posts/[id]', () => {
@@ -56,19 +70,5 @@ describe('GET /api/posts/[id]', () => {
     );
 
     expect(response.status).toBe(404);
-  });
-
-  it('returns an empty page when requesting beyond the dataset', async () => {
-    const response = await getPosts(
-      new NextRequest('http://localhost/api/posts?page=3'),
-    );
-
-    const body = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(body.posts).toEqual([]);
-    expect(body.page).toBe(3);
-    expect(body.pageSize).toBe(20);
-    expect(body.total).toBe(40);
   });
 });
