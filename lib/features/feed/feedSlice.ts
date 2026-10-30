@@ -21,6 +21,7 @@ interface FeedState {
   loading: boolean;
   error: string | null;
   hasMore: boolean;
+  highlightedIds: Record<string, true>;
 }
 
 const initialState = {
@@ -30,6 +31,7 @@ const initialState = {
   loading: false,
   error: null,
   hasMore: true,
+  highlightedIds: {},
 } satisfies FeedState as FeedState;
 
 export const fetchPosts = createAsyncThunk<
@@ -80,6 +82,12 @@ const feedSlice = createSlice({
 
       state.postsById[post.id] = post;
       state.feedIds.unshift(post.id);
+
+      // Highlight genuinely new live posts.
+      state.highlightedIds[post.id] = true;
+    },
+    postHighlightExpired(state, action: PayloadAction<string>) {
+      delete state.highlightedIds[action.payload];
     },
   },
   extraReducers(builder) {
@@ -124,6 +132,6 @@ export const selectFeedPosts = createSelector(
   (feedIds, postsById) => feedIds.map((id) => postsById[id]),
 );
 
-export const { postReceived } = feedSlice.actions;
+export const { postReceived, postHighlightExpired } = feedSlice.actions;
 
 export default feedSlice.reducer;

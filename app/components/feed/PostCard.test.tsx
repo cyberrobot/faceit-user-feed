@@ -125,4 +125,32 @@ describe('PostCard', () => {
 
     expect(screen.queryByRole('link', { name: /view post/i })).toBeNull();
   });
+
+  it('shows highlighting only while requested', () => {
+    const { rerender } = render(<PostCard post={post} isHighlighted />);
+
+    expect(screen.getByRole('article').getAttribute('data-highlighted')).toBe(
+      'true',
+    );
+
+    expect(screen.getByText('New')).toBeTruthy();
+
+    rerender(<PostCard post={post} isHighlighted={false} />);
+
+    expect(
+      screen.getByRole('article').getAttribute('data-highlighted'),
+    ).toBeNull();
+
+    expect(screen.queryByText('New')).toBeNull();
+  });
+
+  it('does not highlight the full post detail view', () => {
+    render(<PostCard post={post} variant="full" isHighlighted />);
+
+    expect(
+      screen.getByRole('article').getAttribute('data-highlighted'),
+    ).toBeNull();
+
+    expect(screen.queryByText('New')).toBeNull();
+  });
 });
