@@ -368,4 +368,59 @@ describe('feed state', () => {
       '/api/posts?page=2',
     ]);
   });
+
+  it('stops pagination when an empty page is returned despite a larger total', async () => {
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(
+        jsonResponse({
+          posts: [makePost('one'), makePost('two')],
+          page: 1,
+          pageSize: 2,
+          total: 100,
+        }),
+      )
+      .mockResolvedValueOnce(
+        jsonResponse({
+          posts: [],
+          page: 2,
+          pageSize: 2,
+          total: 100,
+        }),
+      );
+
+    vi.stubGlobal('fetch', fetchMock);
+
+    const store = makeStore();
+
+    // First page succeeds.
+    await store.dispatch(fetchPosts());
+
+    expect(store.getState().feed).toMatchObject({
+      feedIds: ['one', 'two'],
+      nextPage: 2,
+      hasMore: true,
+    });
+
+    // Second page is empty despite total = 100.
+    await store.dispatch(fetchPosts());
+
+    expect(store.getState().feed).toMatchObject({
+      feedIds: ['one', 'two'],
+      nextPage: 3,
+      hasMore: false,
+      loading: false,
+      error: null,
+    });
+
+    // Further attempts must not reach the API.
+    await store.dispatch(fetchPosts());
+
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+      '/api/posts?page=1',
+      '/api/posts?page=2',
+    ]);
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });

@@ -62,7 +62,12 @@ export default function FeedContainer() {
       <h1 className="mb-6 text-2xl font-semibold">Feed</h1>
 
       <Feed posts={posts} status={status} error={error} />
-      <div ref={sentinelRef} className="h-px" aria-hidden="true" />
+      <div
+        ref={sentinelRef}
+        data-testid="feed-sentinel"
+        className="h-px"
+        aria-hidden="true"
+      />
     </div>
   );
 }
