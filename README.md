@@ -5,7 +5,7 @@ React, TypeScript and Redux Toolkit.
 
 ## Requirements
 
-- Node.js: [tested version]
+- Node.js: 24.x
 - npm
 - Internet access for installation and external avatars
 
@@ -16,6 +16,8 @@ No environment variables or external API keys are required.
 Install dependencies:
 
 ```bash
+nvm install
+nvm use
 npm ci
 ```
 
