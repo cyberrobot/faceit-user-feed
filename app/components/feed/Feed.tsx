@@ -34,7 +34,7 @@ const Feed = ({ posts, status, error }: FeedProps) => {
   if (!hasPosts && isFailed) {
     return (
       <div role="alert" className="rounded-lg border p-6 text-center">
-        <p className="text-gray-700">
+        <p className="text-gray-700 dark:text-gray-200">
           {error || 'Unable to load posts. Please try again.'}
         </p>
 
@@ -46,7 +46,7 @@ const Feed = ({ posts, status, error }: FeedProps) => {
   if (!hasPosts) {
     return (
       <div className="rounded-lg border p-6 text-center">
-        <p className="text-gray-500">No posts available.</p>
+        <p className="text-gray-500 dark:text-gray-300">No posts available.</p>
       </div>
     );
   }
@@ -72,7 +72,7 @@ const Feed = ({ posts, status, error }: FeedProps) => {
       {/* Inline error and retry for subsequent pages. */}
       {isFailed && (
         <div role="alert" className="mt-4 rounded-lg border p-6 text-center">
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-gray-200">
             {error || 'Unable to load more posts. Please try again.'}
           </p>
 

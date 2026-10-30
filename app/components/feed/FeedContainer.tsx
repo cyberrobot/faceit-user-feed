@@ -13,9 +13,13 @@ export default function FeedContainer() {
 
   const posts = useSelector(selectFeedPosts);
 
-  const { loading, error, nextPage, hasMore } = useSelector(
-    (state: RootState) => state.feed,
-  );
+  const loading = useSelector((state: RootState) => state.feed.loading);
+
+  const error = useSelector((state: RootState) => state.feed.error);
+
+  const nextPage = useSelector((state: RootState) => state.feed.nextPage);
+
+  const hasMore = useSelector((state: RootState) => state.feed.hasMore);
 
   useEffect(() => {
     // Load only the first page on mount; after a failure, let the retry button own the next attempt.

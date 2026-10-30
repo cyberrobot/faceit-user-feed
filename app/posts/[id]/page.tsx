@@ -5,6 +5,7 @@ import PostCard from '@/app/components/feed/PostCard';
 import { getPostById, posts } from '@/lib/data/posts';
 import { Metadata } from 'next';
 import { mockLivePosts } from '@/lib/data/mockLivePosts';
+import { Suspense } from 'react';
 
 export function generateStaticParams() {
   return [...posts, ...mockLivePosts].map(({ id }) => ({ id }));
@@ -21,15 +22,21 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostPage({ params }: PageProps<'/posts/[id]'>) {
+// URL-dependent rendering happens inside Suspense.
+async function PostContent({
+  params,
+}: Pick<PageProps<'/posts/[id]'>, 'params'>) {
   const { id } = await params;
-
   const post = getPostById(id);
 
   if (!post) {
     notFound();
   }
 
+  return <PostCard post={post} variant="full" />;
+}
+
+export default async function PostPage({ params }: PageProps<'/posts/[id]'>) {
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8">
       <Link
@@ -39,9 +46,9 @@ export default async function PostPage({ params }: PageProps<'/posts/[id]'>) {
         ← Back to feed
       </Link>
 
-      <h1 className="sr-only">Post by {post.author.name}</h1>
-
-      <PostCard post={post} variant="full" />
+      <Suspense fallback={<p role="status">Loading post...</p>}>
+        <PostContent params={params} />
+      </Suspense>
     </main>
   );
 }

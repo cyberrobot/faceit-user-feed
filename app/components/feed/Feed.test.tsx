@@ -1,17 +1,40 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import type { Post } from '@/lib/types/post';
 import { FEED_PAGE_SIZE } from '@/app/config/feed';
 import Feed, { FeedStatus } from './Feed';
 import { Provider } from 'react-redux';
 import { makeStore } from '@/lib/store';
+import { ImageProps } from 'next/image';
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string | { src: string }; alt: string }) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={typeof src === 'string' ? src : src.src} alt={alt} />
-  ),
+  default: ({
+    src,
+    alt,
+    unoptimized: _unoptimized,
+    placeholder: _placeholder,
+    blurDataURL: _blurDataURL,
+    ...props
+  }: ImageProps) => {
+    void _unoptimized;
+    void _placeholder;
+    void _blurDataURL;
+
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        {...props}
+        alt={alt}
+        src={
+          typeof src === 'string'
+            ? src
+            : 'src' in src
+              ? src.src
+              : src.default.src
+        }
+      />
+    );
+  },
 }));
 
 function renderContainer(
@@ -121,8 +144,6 @@ describe('Feed', () => {
   });
 
   it('keeps existing posts visible when loading more fails', async () => {
-    const user = userEvent.setup();
-
     renderContainer(makePosts(20), 'failed', 'Unable to load page 2');
 
     // Already loaded posts remain visible.

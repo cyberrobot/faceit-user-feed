@@ -11,7 +11,15 @@ export function RetryButton() {
     <button
       type="button"
       onClick={() => void dispatch(fetchPosts())}
-      className="mt-4 h-12 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+      className="
+        mt-4 min-h-12 rounded-full
+        bg-foreground px-5 text-background
+        hover:opacity-90
+        focus-visible:outline-2
+        focus-visible:outline-offset-4
+        focus-visible:outline-blue-600
+        dark:focus-visible:outline-blue-400
+      "
     >
       Try again
     </button>

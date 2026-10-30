@@ -8,12 +8,19 @@ import { mockLivePosts } from '@/lib/data/mockLivePosts';
 import { subscribeToMockPosts } from '@/lib/mocks/mockPostEvents';
 import type { RootState } from '@/lib/store';
 import type { Post } from '@/lib/types/post';
+import { ImageProps } from 'next/image';
 
 // Match the image mock used in existing feed tests.
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string | { src: string }; alt: string }) => (
+  default: ({ src, alt, ...props }: ImageProps) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={typeof src === 'string' ? src : src.src} alt={alt} />
+    <img
+      {...props}
+      alt={alt}
+      src={
+        typeof src === 'string' ? src : 'src' in src ? src.src : src.default.src
+      }
+    />
   ),
 }));
 
@@ -104,7 +111,7 @@ function advanceEvents(ms: number) {
 function renderedPostTitles() {
   return screen
     .getAllByRole('article')
-    .map((article) => article.querySelector('h1')?.textContent);
+    .map((article) => article.querySelector('h2')?.textContent);
 }
 
 beforeEach(() => {

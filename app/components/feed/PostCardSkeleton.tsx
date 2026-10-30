@@ -2,7 +2,11 @@ export default function PostCardSkeleton() {
   return (
     <div
       aria-hidden="true"
-      className="animate-pulse rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+      className="
+        animate-pulse
+        motion-reduce:animate-none
+        rounded-lg border p-4
+      "
     >
       {/* Avatar and author */}
       <div className="mb-4 flex items-center gap-3">
