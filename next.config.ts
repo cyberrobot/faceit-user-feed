@@ -13,15 +13,6 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'api.dicebear.com',
-        pathname: '/10.x/lorelei/svg',
-      },
-    ],
-  },
 };
 
 export default nextConfig;
