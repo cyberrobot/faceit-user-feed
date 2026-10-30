@@ -104,7 +104,7 @@ const feedSlice = createSlice({
 
         state.nextPage = page + 1;
         // The API reports the total count, so this determines whether another page exists.
-        state.hasMore = page * pageSize < total;
+        state.hasMore = posts.length > 0 && page * pageSize < total;
         state.loading = false;
         state.error = null;
       })
