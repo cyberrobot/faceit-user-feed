@@ -1,5 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 
@@ -7,7 +14,10 @@ import { makeStore } from '@/lib/store';
 import type { Post } from '@/lib/types/post';
 import FeedContainer from './FeedContainer';
 import { FEED_PAGE_SIZE } from '@/app/config/feed';
-import { postReceived } from '@/lib/features/feed/feedSlice';
+import {
+  postHighlightExpired,
+  postReceived,
+} from '@/lib/features/feed/feedSlice';
 import { ImageProps } from 'next/image';
 
 vi.mock('next/image', () => ({
@@ -664,5 +674,40 @@ describe('FeedContainer', () => {
     ]);
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('renders and removes highlighting for incoming posts', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(successfulResponse());
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { store } = renderContainer();
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('article')).toHaveLength(20);
+    });
+
+    const livePost = {
+      ...makePosts(1)[0],
+      id: 'live-001',
+      title: 'New live post',
+    };
+
+    act(() => {
+      store.dispatch(postReceived(livePost));
+    });
+
+    const article = screen
+      .getByRole('heading', { name: 'New live post' })
+      .closest('article');
+
+    expect(article?.getAttribute('data-highlighted')).toBe('true');
+    expect(within(article!).getByText('New')).toBeTruthy();
+
+    act(() => {
+      store.dispatch(postHighlightExpired(livePost.id));
+    });
+
+    expect(article?.getAttribute('data-highlighted')).toBeNull();
+    expect(within(article!).queryByText('New')).toBeNull();
   });
 });
