@@ -5,16 +5,33 @@ import PostCard from './PostCard';
 import { ImageProps } from 'next/image';
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: ImageProps) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      {...props}
-      alt={alt}
-      src={
-        typeof src === 'string' ? src : 'src' in src ? src.src : src.default.src
-      }
-    />
-  ),
+  default: ({
+    src,
+    alt,
+    unoptimized: _unoptimized,
+    placeholder: _placeholder,
+    blurDataURL: _blurDataURL,
+    ...props
+  }: ImageProps) => {
+    void _unoptimized;
+    void _placeholder;
+    void _blurDataURL;
+
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        {...props}
+        alt={alt}
+        src={
+          typeof src === 'string'
+            ? src
+            : 'src' in src
+              ? src.src
+              : src.default.src
+        }
+      />
+    );
+  },
 }));
 
 const post: Post = {

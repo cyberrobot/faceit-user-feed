@@ -61,7 +61,6 @@ const PostCard = ({ post, variant = 'preview' }: PostCardProps) => {
       {isPreview && (
         <Link
           href={`/posts/${encodeURIComponent(post.id)}`}
-          prefetch={false}
           className="
             self-start rounded-sm font-medium
             text-blue-600 dark:text-blue-400
