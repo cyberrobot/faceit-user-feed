@@ -5,7 +5,7 @@ React, TypeScript and Redux Toolkit.
 
 ## Requirements
 
-- Node.js: 24.x
+- Node.js: 24.15+ (24.x)
 - npm
 - Internet access for installation and external avatars
 
@@ -16,10 +16,10 @@ No environment variables or external API keys are required.
 Install dependencies:
 
 ```bash
-nvm install
-nvm use
 npm ci
 ```
+
+If using NVM, run `nvm install` and `nvm use` before installing dependencies.
 
 Start the development server:
 
@@ -61,6 +61,8 @@ On Linux, Playwright may require system dependencies (`npx playwright install --
 - **Post details:** `/posts/[id]` displays full content and supports direct URLs, refreshes, back navigation and not-found handling. Known mock post IDs are available at build time.
 - **Redux Toolkit:** `lib/features/feed/feedSlice.ts` stores posts in `postsById`, preserves display order in `feedIds`, and tracks the next page, loading, errors and end-of-feed state. A memoised selector derives the visible posts. Request guards prevent overlapping page loads and unnecessary requests after the last page.
 - **Persistent subscription:** `FeedUpdatesSubscriber`, mounted within the root `StoreProvider`, continues receiving simulated posts while the user is viewing a detail page. Returning to the feed retains in-memory state.
+- **Post highlighting:** Newly received posts are highlighted for four seconds. Duplicate events do not restart the highlight timer.
+- **Scroll restoration:** Returning from post details restores the previous feed position and loaded posts, even when new posts arrive during navigation.
 
 Key locations: `app/components/feed/` (UI), `app/api/posts/` (route handlers), `lib/data/` (mock records), `lib/mocks/mockPostEvents.ts` (event source), `lib/features/feed/feedSlice.ts` (state), `e2e/` (browser tests).
 
@@ -104,7 +106,7 @@ This is a **browser timer**, not SSE or WebSockets. `subscribeToMockPosts()` emi
 | Timer-based events                 | Easy to demonstrate and test; not a real multi-client push system, with only 22 events.                                                           |
 | All loaded cards rendered          | Straightforward at this scale; very long feeds may need virtualisation.                                                                           |
 | Remote avatars with local fallback | Missing/failed avatars have a fallback; working remote images still depend on network access.                                                     |
-| Navigation                         | Feed data persists during client navigation, but exact scroll-position restoration is not explicitly implemented.                                 |
+| Navigation                         | Feed state and scroll position are preserved during client-side navigation; a full page reload resets the in-memory state.                        |
 | Tests                              | Vitest covers logic/components and Playwright covers browser flows and accessibility checks; not exhaustive cross-browser or real-device testing. |
 
 Possible production extensions include a durable API, cursor pagination, SSE/WebSocket reconnect and replay handling, persistent client cache, scroll restoration and virtualised lists. These are **not implemented** in this exercise.
