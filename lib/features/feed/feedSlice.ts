@@ -93,13 +93,11 @@ const feedSlice = createSlice({
 
         // Keep IDs in first-seen order; overlapping pages update post data without duplicating IDs.
         for (const post of posts) {
-          if (state.postsById !== null) {
-            if (!state.postsById[post.id]) {
-              state.feedIds.push(post.id);
-            }
-
-            state.postsById[post.id] = post;
+          if (!state.postsById[post.id]) {
+            state.feedIds.push(post.id);
           }
+
+          state.postsById[post.id] = post;
         }
 
         state.nextPage = page + 1;
