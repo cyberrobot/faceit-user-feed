@@ -41,6 +41,7 @@ export default async function PostPage({ params }: PageProps<'/posts/[id]'>) {
     <main className="mx-auto w-full max-w-3xl px-4 py-8">
       <Link
         href="/"
+        scroll={false}
         className="mb-6 inline-block text-sm font-medium hover:underline"
       >
         ← Back to feed

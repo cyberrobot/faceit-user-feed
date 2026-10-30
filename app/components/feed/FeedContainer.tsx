@@ -1,29 +1,60 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import type { AppDispatch, RootState } from '@/lib/store';
-import { fetchPosts, selectFeedPosts } from '@/lib/features/feed/feedSlice';
+import {
+  clearFeedScrollBookmark,
+  fetchPosts,
+  saveFeedScrollBookmark,
+  selectFeedPosts,
+} from '@/lib/features/feed/feedSlice';
 import Feed from './Feed';
 
 export default function FeedContainer() {
   const dispatch = useDispatch<AppDispatch>();
+  const store = useStore<RootState>();
   const sentinelRef = useRef<HTMLDivElement>(null);
-
   const posts = useSelector(selectFeedPosts);
-
   const loading = useSelector((state: RootState) => state.feed.loading);
-
   const error = useSelector((state: RootState) => state.feed.error);
-
   const nextPage = useSelector((state: RootState) => state.feed.nextPage);
-
   const hasMore = useSelector((state: RootState) => state.feed.hasMore);
-
   const highlightedIds = useSelector(
     (state: RootState) => state.feed.highlightedIds,
   );
+
+  const handleOpenPost = (postId: string, viewportTop: number) => {
+    // Save the scroll position and post ID to the Redux store before navigating away.
+    dispatch(
+      saveFeedScrollBookmark({
+        postId,
+        viewportTop,
+        scrollY: window.scrollY,
+      }),
+    );
+  };
+
+  useLayoutEffect(() => {
+    // Restore the scroll position if a bookmark exists.
+    const bookmark = store.getState().feed.scrollBookmark;
+    if (!bookmark) {
+      return;
+    }
+
+    const { postId, viewportTop, scrollY } = bookmark;
+
+    const article = document.getElementById(`feed-post-${postId}`);
+
+    const targetY = article
+      ? window.scrollY + article.getBoundingClientRect().top - viewportTop
+      : scrollY;
+
+    window.scrollTo({ top: Math.max(0, targetY), behavior: 'instant' });
+
+    dispatch(clearFeedScrollBookmark());
+  }, [dispatch, store]);
 
   useEffect(() => {
     // Load only the first page on mount; after a failure, let the retry button own the next attempt.
@@ -74,6 +105,7 @@ export default function FeedContainer() {
         status={status}
         error={error}
         highlightedIds={highlightedIds}
+        onOpenPost={handleOpenPost}
       />
       <div
         ref={sentinelRef}

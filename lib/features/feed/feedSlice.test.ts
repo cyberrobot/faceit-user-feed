@@ -1,9 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeStore } from '@/lib/store';
 import {
+  clearFeedScrollBookmark,
   fetchPosts,
   postHighlightExpired,
   postReceived,
+  saveFeedScrollBookmark,
   selectFeedPosts,
 } from './feedSlice';
 import type { Post } from '@/lib/types/post';
@@ -480,5 +482,23 @@ describe('feed state', () => {
     store.dispatch(postReceived(post));
 
     expect(store.getState().feed.highlightedIds).toEqual({});
+  });
+
+  it('saves and clears the feed scroll bookmark', () => {
+    const store = makeStore();
+
+    const bookmark = {
+      postId: 'post-025',
+      viewportTop: 150,
+      scrollY: 2400,
+    };
+
+    store.dispatch(saveFeedScrollBookmark(bookmark));
+
+    expect(store.getState().feed.scrollBookmark).toEqual(bookmark);
+
+    store.dispatch(clearFeedScrollBookmark());
+
+    expect(store.getState().feed.scrollBookmark).toBeNull();
   });
 });

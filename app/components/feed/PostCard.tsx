@@ -12,12 +12,14 @@ interface PostCardProps {
   post: Post;
   variant?: 'preview' | 'full';
   isHighlighted?: boolean;
+  onOpenPost?: (postId: string, viewportTop: number) => void;
 }
 
 const PostCard = ({
   post,
   variant = 'preview',
   isHighlighted,
+  onOpenPost,
 }: PostCardProps) => {
   const [failedAvatarUrl, setFailedAvatarUrl] = useState<string | null>(null);
   const avatarUrl = post.author.avatarUrl;
@@ -37,6 +39,7 @@ const PostCard = ({
 
   return (
     <article
+      id={isPreview ? `feed-post-${post.id}` : undefined}
       data-highlighted={showHighlight ? 'true' : undefined}
       className={[
         'flex flex-col gap-2 rounded-md border p-4 shadow-sm',
@@ -90,6 +93,25 @@ const PostCard = ({
         <Link
           href={`/posts/${encodeURIComponent(post.id)}`}
           className={viewPostClassName}
+          onClick={(e) => {
+            // Ignore modified clicks that may open another tab.
+            if (
+              e.defaultPrevented ||
+              e.button !== 0 ||
+              e.metaKey ||
+              e.altKey ||
+              e.ctrlKey ||
+              e.shiftKey
+            ) {
+              return;
+            }
+
+            const article = e.currentTarget.closest('article');
+
+            const viewportTop = article?.getBoundingClientRect().top ?? 0;
+
+            onOpenPost?.(post.id, viewportTop);
+          }}
         >
           View post
           <span className="sr-only"> by {post.title}</span>
