@@ -8,11 +8,18 @@ import type { Post } from '@/lib/types/post';
 import FeedContainer from './FeedContainer';
 import { FEED_PAGE_SIZE } from '@/app/config/feed';
 import { postReceived } from '@/lib/features/feed/feedSlice';
+import { ImageProps } from 'next/image';
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string | { src: string }; alt: string }) => (
+  default: ({ src, alt, ...props }: ImageProps) => (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={typeof src === 'string' ? src : src.src} alt={alt} />
+    <img
+      {...props}
+      alt={alt}
+      src={
+        typeof src === 'string' ? src : 'src' in src ? src.src : src.default.src
+      }
+    />
   ),
 }));
 
@@ -369,7 +376,7 @@ describe('FeedContainer', () => {
 
     // Live post must appear at the top.
     expect(
-      screen.getAllByRole('article')[0].querySelector('h1')?.textContent,
+      screen.getAllByRole('article')[0].querySelector('h2')?.textContent,
     ).toBe('New live post');
 
     // Pagination must not advance because of live events.
@@ -454,7 +461,7 @@ describe('FeedContainer', () => {
     expect(screen.getAllByRole('article')).toHaveLength(21);
 
     expect(
-      screen.getAllByRole('article')[0].querySelector('h1')?.textContent,
+      screen.getAllByRole('article')[0].querySelector('h2')?.textContent,
     ).toBe(livePost.title);
 
     // The incoming event must not change pagination.
@@ -486,7 +493,7 @@ describe('FeedContainer', () => {
     const articles = screen.getAllByRole('article');
 
     // The live post remains at the top.
-    expect(articles[0].querySelector('h1')?.textContent).toBe(livePost.title);
+    expect(articles[0].querySelector('h2')?.textContent).toBe(livePost.title);
 
     // It must only appear once.
     expect(

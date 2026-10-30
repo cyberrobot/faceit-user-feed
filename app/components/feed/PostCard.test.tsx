@@ -2,21 +2,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import type { Post } from '@/lib/types/post';
 import PostCard from './PostCard';
+import { ImageProps } from 'next/image';
 
 vi.mock('next/image', () => ({
-  default: ({
-    src,
-    alt,
-    onError,
-  }: {
-    src: string | { src: string };
-    alt: string;
-    onError?: () => void;
-  }) => (
+  default: ({ src, alt, ...props }: ImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={typeof src === 'string' ? src : src.src}
+      {...props}
       alt={alt}
-      onError={onError}
+      src={
+        typeof src === 'string' ? src : 'src' in src ? src.src : src.default.src
+      }
     />
   ),
 }));
@@ -61,11 +57,11 @@ describe('PostCard', () => {
   it('renders the author avatar', () => {
     render(<PostCard post={post} />);
 
-    const image = screen.getByRole('img', {
-      name: 'Maya Chen',
-    });
-
-    expect(image.getAttribute('src')).toBe(post.author.avatarUrl);
+    const avatar = screen.getByTestId('author-avatar');
+    expect(avatar.getAttribute('alt')).toBe('');
+    expect(avatar.getAttribute('width')).toBe('40');
+    expect(avatar.getAttribute('height')).toBe('40');
+    expect(avatar.getAttribute('src')).toBe(post.author.avatarUrl);
   });
 
   it('uses the fallback image when the avatar URL is empty', () => {
@@ -78,19 +74,15 @@ describe('PostCard', () => {
       />,
     );
 
-    const image = screen.getByRole('img', {
-      name: 'Maya Chen',
-    });
+    const avatar = screen.getByTestId('author-avatar');
 
-    expect(image.getAttribute('src')).toContain('avatar.png');
+    expect(avatar.getAttribute('src')).toContain('avatar.png');
   });
 
   it('displays fallback avatar when remote image fails', () => {
     render(<PostCard post={post} />);
 
-    const avatar = screen.getByRole('img', {
-      name: 'Maya Chen',
-    });
+    const avatar = screen.getByTestId('author-avatar');
 
     expect(avatar.getAttribute('src')).toBe(post.author.avatarUrl);
 
