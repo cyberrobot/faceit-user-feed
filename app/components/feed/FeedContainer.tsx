@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import type { AppDispatch, RootState } from '@/lib/store';
@@ -25,16 +25,19 @@ export default function FeedContainer() {
     (state: RootState) => state.feed.highlightedIds,
   );
 
-  const handleOpenPost = (postId: string, viewportTop: number) => {
-    // Save the scroll position and post ID to the Redux store before navigating away.
-    dispatch(
-      saveFeedScrollBookmark({
-        postId,
-        viewportTop,
-        scrollY: window.scrollY,
-      }),
-    );
-  };
+  const handleOpenPost = useCallback(
+    (postId: string, viewportTop: number) => {
+      // Save the scroll position and post ID to the Redux store before navigating away.
+      dispatch(
+        saveFeedScrollBookmark({
+          postId,
+          viewportTop,
+          scrollY: window.scrollY,
+        }),
+      );
+    },
+    [dispatch],
+  );
 
   useLayoutEffect(() => {
     // Restore the scroll position if a bookmark exists.
