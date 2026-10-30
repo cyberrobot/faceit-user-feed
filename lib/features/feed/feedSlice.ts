@@ -14,6 +14,12 @@ interface PostsPage {
   total: number;
 }
 
+interface FeedScrollBookmark {
+  postId: string;
+  viewportTop: number;
+  scrollY: number;
+}
+
 interface FeedState {
   postsById: Record<string, Post>;
   feedIds: string[];
@@ -22,6 +28,7 @@ interface FeedState {
   error: string | null;
   hasMore: boolean;
   highlightedIds: Record<string, true>;
+  scrollBookmark: FeedScrollBookmark | null;
 }
 
 const initialState = {
@@ -32,6 +39,7 @@ const initialState = {
   error: null,
   hasMore: true,
   highlightedIds: {},
+  scrollBookmark: null,
 } satisfies FeedState as FeedState;
 
 export const fetchPosts = createAsyncThunk<
@@ -89,6 +97,12 @@ const feedSlice = createSlice({
     postHighlightExpired(state, action: PayloadAction<string>) {
       delete state.highlightedIds[action.payload];
     },
+    saveFeedScrollBookmark(state, action: PayloadAction<FeedScrollBookmark>) {
+      state.scrollBookmark = action.payload;
+    },
+    clearFeedScrollBookmark(state) {
+      state.scrollBookmark = null;
+    },
   },
   extraReducers(builder) {
     builder
@@ -132,6 +146,11 @@ export const selectFeedPosts = createSelector(
   (feedIds, postsById) => feedIds.map((id) => postsById[id]),
 );
 
-export const { postReceived, postHighlightExpired } = feedSlice.actions;
+export const {
+  postReceived,
+  postHighlightExpired,
+  saveFeedScrollBookmark,
+  clearFeedScrollBookmark,
+} = feedSlice.actions;
 
 export default feedSlice.reducer;

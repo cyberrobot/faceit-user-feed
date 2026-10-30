@@ -11,9 +11,16 @@ interface FeedProps {
   status: FeedStatus;
   error?: string | null;
   highlightedIds?: Record<string, true>;
+  onOpenPost?: (postId: string, viewportTop: number) => void;
 }
 
-const Feed = ({ posts, status, error, highlightedIds = {} }: FeedProps) => {
+const Feed = ({
+  posts,
+  status,
+  error,
+  highlightedIds = {},
+  onOpenPost,
+}: FeedProps) => {
   const hasPosts = posts.length > 0;
   const isLoading = status === 'loading';
   const isFailed = status === 'failed';
@@ -61,6 +68,7 @@ const Feed = ({ posts, status, error, highlightedIds = {} }: FeedProps) => {
             <PostCard
               post={post}
               isHighlighted={Boolean(highlightedIds[post.id])}
+              onOpenPost={onOpenPost}
             />
           </li>
         ))}
